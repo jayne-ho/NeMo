@@ -18,6 +18,7 @@ from nemo.collections.common.callbacks import LogEpochTimeCallback
 from nemo.collections.tts.models import FastPitchModel
 from nemo.core.config import hydra_runner
 from nemo.utils.exp_manager import exp_manager
+from numba import set_num_threads
 
 
 @hydra_runner(config_path="conf", config_name="fastpitch_align_v1.05")
