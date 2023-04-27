@@ -28,6 +28,7 @@ def main(cfg):
     lr_logger = pl.callbacks.LearningRateMonitor()
     epoch_time_logger = LogEpochTimeCallback()
     trainer.callbacks.extend([lr_logger, epoch_time_logger])
+    set_num_threads(2) # 降低CPU占用.比较有效.
     trainer.fit(model)
 
 
