@@ -787,3 +787,46 @@ class ChinesePhonemesTokenizer(BaseTokenizer):
             ps = [space] + ps + [space]
 
         return [self._token2id[p] for p in ps]
+
+class SplitTokenizer(BaseTokenizer):
+    # fmt: off
+    PRONUNCIATION_LIST = [
+        '@w', '@uo3', '@y', '@i3', '@j', '@ing1', '@b', '@a3', '@o1', '@l', '@a1', '@h', '@ei1', '@e', 
+        '@n', '@iou4', '@sh', '@i4', '@ie2', '@z', '@ai4', '@a4', '@m', '@g', '@ou3', '@t', '@uo2', '@i',
+        '@q', '@vn2', '@uo1', '@zh', '@i1', '@d', '@ao4', '@uei4', '@a2', '@a', '@e4', '@ing3', '@ei', 
+        '@u4', '@uan2', '@f', '@an4', '@en2', '@c', '@uo4', '@uei1', '@iou1', '@ei2', '@e2', '@r', '@en4', 
+        '@eng1', '@e1', '@en1', '@ou4', '@ang4', '@p', '@eng2', '@ong4', '@u2', '@iang2', '@van1', '@ian1', 
+        '@ei4', '@er3', '@ia1', '@ou2', '@ao3', '@ou1', '@er2', '@s', '@i2', '@v4', '@x', '@ian4', '@ong1', 
+        '@uan3', '@uang2', '@ing4', '@ch', '@uen1', '@ai1', '@an3', '@eng4', '@ing2', '@ve4', '@k', '@ang3',
+        '@en3', '@ai2', '@ian3','@er4', '@ai3', '@uai4', '@ian2', '@ao1', '@eng3', '@ia4', '@n2', '@ang1', 
+        '@ie3', '@uen3', '@iou3', '@ei3', '@in4', '@v3', '@uen4', '@an2', '@iang1', '@in1', '@u3', '@ve2', 
+        '@e3', '@iang4', '@ia', '@an1', '@in3', '@iao4', '@ang2', '@vn1', '@iao3', '@u1', '@ie1', '@ie4', '@v2', 
+        '@uei2', '@iong1', '@iao1', '@o2', '@uei3', '@in2', '@iong4', '@ve1', '@uang1', '@iang3', '@uan4', 
+        '@iou2', '@en', '@uan1', '@ia2', '@ua1', '@ong3', '@van4', '@van2', '@uang3', '@iao2', '@ua4', '@ong2', 
+        '@uen2', '@iong3', '@er', '@v1', '@uang4', '@ia3', '@ve3', '@ua2', '@van3', '@ao2', '@o4', '@ua3', 
+        '@vn4', '@iong2', '@io1', '@uai1', '@ou','@uai2', '@ua', '@ueng1', '@o', '@uai3', '@o3', '@uo', '@vn3'
+    ] + list(string.ascii_lowercase) + list("、，。？！～…—")
+
+    def __init__(
+        self,
+        *,
+        space=' ',
+        add_blank_at=None,
+        pad_with_space=True,
+    ):
+        tokens = []
+        self.space, tokens = len(tokens), tokens + [space]  # Space
+        tokens.extend(self.PRONUNCIATION_LIST)
+
+        super().__init__(tokens, sep=' ', add_blank_at=add_blank_at)
+        self.pad_with_space = pad_with_space
+
+
+    def encode(self, text):
+        """See base class for more information."""
+        
+        ps, space = text.split(), self.tokens[self.space]
+        if self.pad_with_space:
+            ps = [space] + ps + [space]
+
+        return [self._token2id[p] for p in ps]
